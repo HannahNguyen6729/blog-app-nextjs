@@ -31,9 +31,22 @@ a {
   max-width: 1536px;
   margin-left: auto;
   margin-right: auto;
-  background-color: rebeccapurple;
   padding-left: 80px;
   padding-right: 80px;
+}
+
+.dark {
+  --bg: #0f172a;
+  --textColor: #ddd;
+  --softBg: #1f273a;
+  --softTextColor: #a6a6a6;
+}
+
+.light {
+  --bg: white;
+  --textColor: black;
+  --softBg: #f0f0f0;
+  --softTextColor: #626262;
 }
 
 @media screen and (max-width: 1536px) {
