@@ -18,7 +18,12 @@ const Card = () => {
         <Link href={`/posts/`}>
           <h1>card</h1>
         </Link>
-        <div className={styles.desc} />
+        <div className={styles.desc}>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim
+          necessitatibus similique aspernatur obcaecati veritatis. Aperiam cum
+          porro sequi, totam minima consequuntur, aspernatur deleniti vero
+          repellendus dorales.
+        </div>
         <Link href={`/posts/`} className={styles.link}>
           Read More
         </Link>
