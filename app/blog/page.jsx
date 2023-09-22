@@ -1,3 +1,4 @@
+import React from 'react';
 import CardList from '@/components/cardList/CardList';
 import Menu from '@/components/Menu/Menu';
 
