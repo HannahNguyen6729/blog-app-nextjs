@@ -5,13 +5,15 @@ import Featured from '@/components/featured/Featured';
 import CardList from '@/components/cardList/CardList';
 import Menu from '@/components/menu/Menu';
 
-export default function Home() {
+export default function Home({ searchParams }) {
+  const pageNumber = Number(searchParams.page) || 1;
+
   return (
     <main className={styles.container}>
       <Featured />
       <CategoryList />
       <div className={styles.content}>
-        <CardList />
+        <CardList pageNumber={pageNumber} />
         <Menu />
       </div>
     </main>
