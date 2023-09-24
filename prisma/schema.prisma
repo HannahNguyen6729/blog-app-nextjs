@@ -60,12 +60,11 @@ model User {
 }
 
 model Category {
-  id      String   @id @default(cuid()) @map("_id")
-  slug    String   @unique
-  title   String
-  image   String?
-  posts   Post[]
-  postIds String[]
+  id    String  @id @default(cuid()) @map("_id")
+  slug  String  @unique
+  title String
+  image String?
+  posts Post[]
 }
 
 model Post {
