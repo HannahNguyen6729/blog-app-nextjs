@@ -11,3 +11,5 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export default prisma;
+
+//doc: https://www.prisma.io/docs/guides/other/troubleshooting-orm/help-articles/nextjs-prisma-client-dev-practices
