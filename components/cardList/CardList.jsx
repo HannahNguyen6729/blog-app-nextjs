@@ -3,9 +3,11 @@ import styles from './cardList.module.css';
 import Pagination from '../pagination/Pagination';
 import Card from '../card/Card';
 
-const getData = async (pageNumber) => {
+const getData = async (pageNumber, category) => {
   const res = await fetch(
-    `http://localhost:3000/api/posts?page=${pageNumber}`,
+    `http://localhost:3000/api/posts?page=${pageNumber}&category=${
+      category || ''
+    }`,
     {
       cache: 'no-store',
     }
@@ -18,8 +20,9 @@ const getData = async (pageNumber) => {
   return res.json();
 };
 
-const CardList = async ({ pageNumber }) => {
-  const data = await getData(pageNumber);
+const CardList = async ({ pageNumber, category }) => {
+  const data = await getData(pageNumber, category);
+  console.log({ category });
 
   const POST_PER_PAGE = 2;
 

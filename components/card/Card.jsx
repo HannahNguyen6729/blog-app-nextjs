@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 import styles from './card.module.css';
 
-const Card = ({ key, post }) => {
-  const { title, slug, desc, image, createdAt } = post;
+const Card = ({ post }) => {
+  const { title, slug, desc, image, createdAt, catSlug } = post;
   return (
-    <div className={styles.container} key={key}>
+    <div className={styles.container}>
       {image && (
         <div className={styles.imageContainer}>
           <Image src={image} alt={title} fill className={styles.image} />
@@ -16,7 +16,7 @@ const Card = ({ key, post }) => {
       <div className={styles.textContainer}>
         <div className={styles.detail}>
           <span className={styles.date}> {createdAt.substring(0, 10)} - </span>
-          <span className={styles.category}> {slug} </span>
+          <span className={styles.category}> {catSlug} </span>
         </div>
         <Link href={`/posts/${slug}`}>
           <h1> {title} </h1>
