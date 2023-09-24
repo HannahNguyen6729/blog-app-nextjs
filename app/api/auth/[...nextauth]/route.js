@@ -2,12 +2,11 @@ import NextAuth from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import Google from 'next-auth/providers/google';
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/utils/connect';
 
-//Callback URL:   http://localhost:3000/api/auth/callback/google
-//http://localhost:3000/api/auth/callback/github
-
-const prisma = new PrismaClient();
+//Callback URL:
+// http://localhost:3000/api/auth/callback/google
+// http://localhost:3000/api/auth/callback/github
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
