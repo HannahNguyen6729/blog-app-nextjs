@@ -2,6 +2,11 @@
   cursor: pointer;
 }
 
+.lastLink {
+  cursor: pointer;
+  padding-left: 20px !important;
+}
+
 .burger {
   width: 20px;
   height: 16px;

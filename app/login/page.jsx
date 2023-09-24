@@ -1,8 +1,9 @@
 'use client';
 
 import { useSession, signIn } from 'next-auth/react';
-import styles from './loginPage.module.css';
 import { useRouter } from 'next/navigation';
+
+import styles from './loginPage.module.css';
 
 const LoginPage = () => {
   const { data: session, status } = useSession();
