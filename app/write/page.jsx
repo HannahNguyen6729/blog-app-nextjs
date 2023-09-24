@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import 'react-quill/dist/quill.bubble.css';
+//import 'react-quill/dist/quill.bubble.css';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
