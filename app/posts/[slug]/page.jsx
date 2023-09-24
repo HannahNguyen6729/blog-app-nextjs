@@ -54,7 +54,7 @@ const SinglePage = async ({ params }) => {
           <div className={styles.description} />
           <div className={styles.comment}>
             {data?.desc}
-            <Comments />
+            <Comments postSlug={params.slug} />
           </div>
         </div>
         <Menu />
