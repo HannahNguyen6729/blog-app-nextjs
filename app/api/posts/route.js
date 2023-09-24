@@ -12,9 +12,13 @@ export const GET = async (req) => {
       take: POST_PER_PAGE,
       skip: POST_PER_PAGE * (page - 1),
     });
+
+    const count = await prisma.post.count();
+
     return NextResponse.json({
       status: 200,
       posts,
+      count,
     });
   } catch (error) {
     console.log(error);
