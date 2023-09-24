@@ -4,45 +4,43 @@ import Image from 'next/image';
 
 import styles from './categoryList.module.css';
 
+const getData = async () => {
+  const res = await fetch('http://localhost:3000/api/categories', {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch data');
+  }
+
+  return res.json();
+};
+
 const CategoryList = async () => {
+  const data = await getData();
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Popular Categories</h1>
       <div className={styles.categories}>
-        <Link
-          href="/blog?cat=style"
-          className={`${styles.category} ${styles.style}`}
-        >
-          <Image
-            src="/style.png"
-            alt=""
-            width={32}
-            height={32}
-            className={styles.image}
-          />
-          style
-        </Link>
-
-        <Link href="/blog" className={`${styles.category} ${styles.style}`}>
-          <Image
-            src="/fashion.png"
-            alt=""
-            width={32}
-            height={32}
-            className={styles.image}
-          />
-          style
-        </Link>
-        <Link href="/blog" className={`${styles.category} ${styles.style}`}>
-          <Image
-            src="/food.png"
-            alt=""
-            width={32}
-            height={32}
-            className={styles.image}
-          />
-          style
-        </Link>
+        {data?.categories?.map((category) => (
+          <Link
+            href={`/blog?cat=${category.title}`}
+            className={`${styles.category} ${styles[category.slug]}`}
+            key={category._id}
+          >
+            {category.image && (
+              <Image
+                src={category.image}
+                alt={category.title}
+                width={32}
+                height={32}
+                className={styles.image}
+              />
+            )}
+            {category.title}
+          </Link>
+        ))}
       </div>
     </div>
   );
