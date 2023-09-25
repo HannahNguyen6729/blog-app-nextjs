@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { slugify } from '@/utils/slugify';
 import { useRouter } from 'next/navigation';
@@ -16,6 +15,7 @@ import {
 
 import styles from './writePage.module.css';
 import { firebaseApp } from '@/utils/firebase';
+import dynamic from 'next/dynamic';
 
 const WritePage = () => {
   const { status } = useSession();
@@ -32,12 +32,14 @@ const WritePage = () => {
   const [file, setFile] = useState(null);
   const [media, setMedia] = useState('');
 
+  const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+
   //upload img file with firebase
   useEffect(() => {
     const uploadImgFile = () => {
       const storage = getStorage(firebaseApp);
-      // const imgName = new Date().getTime() + file.name;
-      const imgName = file.name;
+      const imgName = new Date().getTime() + file.name;
+      // const imgName = file.name;
       const storageRef = ref(storage, imgName);
 
       const uploadTask = uploadBytesResumable(storageRef, file);
