@@ -9,6 +9,7 @@ export const GET = async (req, { params }) => {
     const post = await prisma.post.findUnique({
       where: { slug },
       include: { user: true },
+      data: { views: { increment: 1 } },
     });
 
     return new NextResponse(JSON.stringify(post, { status: 200 }));
