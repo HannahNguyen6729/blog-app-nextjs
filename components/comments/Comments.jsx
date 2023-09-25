@@ -4,12 +4,12 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
+import { useState } from 'react';
 
 import styles from './comments.module.css';
 
 const fetcher = async (queryParameters) => {
   const res = await fetch(queryParameters.url);
-
   const data = await res.json();
 
   if (!res.ok) {
@@ -23,22 +23,51 @@ const fetcher = async (queryParameters) => {
 const Comments = ({ postSlug }) => {
   const { status } = useSession();
 
-  const { data, isLoading, error } = useSWR(
+  const { data, isLoading, error, mutate } = useSWR(
     { url: `http://localhost:3000/api/comments?postSlug=${postSlug}` },
     fetcher
   );
 
-  console.log({ status, data });
+  const [description, setDescription] = useState('');
+
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
+
+  const handleOnChange = (e) => {
+    setDescription(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    //call api to create a new comment
+    const response = await fetch(`/api/comments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ desc: description, postSlug }),
+    });
+    const result = await response.json();
+    console.log('Success:', result);
+
+    //update comment list
+    mutate();
+    setDescription('');
+  };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Comments</h1>
       {status === 'authenticated' ? (
         <div className={styles.write}>
-          <textarea placeholder="write a comment..." className={styles.input} />
-          <button className={styles.button}>Send</button>
+          <textarea
+            value={description}
+            onChange={handleOnChange}
+            placeholder="write a comment..."
+            className={styles.input}
+          />
+          <button onClick={handleSubmit} className={styles.button}>
+            Send
+          </button>
         </div>
       ) : (
         <Link href="/login">Login to write a comment</Link>
