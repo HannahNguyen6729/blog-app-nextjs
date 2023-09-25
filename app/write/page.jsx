@@ -1,15 +1,24 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { slugify } from '@/utils/slugify';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
 
 import styles from './writePage.module.css';
-import { useRouter } from 'next/navigation';
+import { firebaseApp } from '@/utils/firebase';
 
 const WritePage = () => {
+  const { status } = useSession();
   const [open, setOpen] = useState(false);
   const [desc, setDesc] = useState('');
 
@@ -19,6 +28,56 @@ const WritePage = () => {
   });
 
   const router = useRouter();
+
+  const [file, setFile] = useState(null);
+  const [media, setMedia] = useState('');
+
+  //upload img file with firebase
+  useEffect(() => {
+    const uploadImgFile = () => {
+      const storage = getStorage(firebaseApp);
+      // const imgName = new Date().getTime() + file.name;
+      const imgName = file.name;
+      const storageRef = ref(storage, imgName);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error) => {
+          console.log('Upload failed', error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            setMedia(downloadURL);
+          });
+        }
+      );
+    };
+    file && uploadImgFile();
+  }, [file]);
+
+  if (status === 'loading') {
+    return <div className={styles.loading}>Loading...</div>;
+  }
+
+  if (status === 'unauthenticated') {
+    router.push('/');
+  }
 
   const handleChange = (e) => {
     setPost({
@@ -39,6 +98,7 @@ const WritePage = () => {
         title: post.title,
         desc,
         catSlug: post.category,
+        image: media,
       }),
     });
     if (response.status === 200) {
@@ -47,6 +107,7 @@ const WritePage = () => {
     }
   };
 
+  console.log({ file });
   return (
     <div className={styles.container}>
       <input
@@ -82,7 +143,12 @@ const WritePage = () => {
         </button>
         {open && (
           <div className={styles.add}>
-            <input type="file" id="image" style={{ display: 'none' }} />
+            <input
+              onChange={(e) => setFile(e.target.files[0])}
+              type="file"
+              id="image"
+              style={{ display: 'none' }}
+            />
             <button className={styles.addButton}>
               <label htmlFor="image">
                 <Image src="/image.png" alt="" width={16} height={16} />
