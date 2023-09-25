@@ -7,8 +7,8 @@ import useSWR from 'swr';
 
 import styles from './comments.module.css';
 
-const fetcher = async (url) => {
-  const res = await fetch(url);
+const fetcher = async (queryParameters) => {
+  const res = await fetch(queryParameters.url);
 
   const data = await res.json();
 
@@ -24,7 +24,7 @@ const Comments = ({ postSlug }) => {
   const { status } = useSession();
 
   const { data, isLoading, error } = useSWR(
-    `http://localhost:3000/api/comments?postSlug=${postSlug}`,
+    { url: `http://localhost:3000/api/comments?postSlug=${postSlug}` },
     fetcher
   );
 
