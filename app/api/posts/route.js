@@ -1,6 +1,8 @@
 import prisma from '@/utils/connect';
 import { NextResponse } from 'next/server';
+import { getAuthSession } from '../auth/[...nextauth]/route';
 
+// get all posts on a specific page
 export const GET = async (req) => {
   try {
     const POST_PER_PAGE = 2;
@@ -29,6 +31,31 @@ export const GET = async (req) => {
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
+    );
+  }
+};
+
+//create a new post
+export const POST = async (req) => {
+  const session = await getAuthSession();
+
+  if (!session) {
+    return new NextResponse(
+      JSON.stringify({ message: 'Unauthenticated!' }, { status: 400 })
+    );
+  }
+
+  try {
+    const body = await req.json();
+    const post = await prisma.posts.create({
+      data: { ...body, userEmail: session.user.email },
+    });
+
+    return new NextResponse(JSON.stringify(post, { status: 200 }));
+  } catch (err) {
+    console.log(err);
+    return new NextResponse(
+      JSON.stringify({ message: 'Something went wrong!' }, { status: 500 })
     );
   }
 };
