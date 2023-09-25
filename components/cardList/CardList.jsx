@@ -22,7 +22,6 @@ const getData = async (pageNumber, category) => {
 
 const CardList = async ({ pageNumber, category }) => {
   const data = await getData(pageNumber, category);
-  console.log({ category });
 
   const POST_PER_PAGE = 2;
 
