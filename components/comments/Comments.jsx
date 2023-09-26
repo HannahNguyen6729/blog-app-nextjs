@@ -24,7 +24,7 @@ const Comments = ({ postSlug }) => {
   const { status } = useSession();
 
   const { data, isLoading, error, mutate } = useSWR(
-    { url: `http://localhost:3000/api/comments?postSlug=${postSlug}` },
+    { url: `http://127.0.0.1:3000/api/comments?postSlug=${postSlug}` },
     fetcher
   );
 
