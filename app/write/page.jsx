@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import 'react-quill/dist/quill.snow.css';
 import { slugify } from '@/utils/slugify';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
@@ -12,27 +11,24 @@ import {
   uploadBytesResumable,
   getDownloadURL,
 } from 'firebase/storage';
+import { firebaseApp } from '@/utils/firebase';
 
 import styles from './writePage.module.css';
-import { firebaseApp } from '@/utils/firebase';
-import dynamic from 'next/dynamic';
 
 const WritePage = () => {
   const { status } = useSession();
   const [open, setOpen] = useState(false);
-  const [desc, setDesc] = useState('');
 
   const [post, setPost] = useState({
     title: '',
     category: 'style',
+    desc: '',
   });
 
   const router = useRouter();
 
   const [file, setFile] = useState(null);
   const [media, setMedia] = useState('');
-
-  const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
   //upload img file with firebase
   useEffect(() => {
@@ -98,7 +94,7 @@ const WritePage = () => {
       body: JSON.stringify({
         slug: slugify(post.title),
         title: post.title,
-        desc,
+        desc: post.desc,
         catSlug: post.category,
         image: media,
       }),
@@ -165,12 +161,12 @@ const WritePage = () => {
           </div>
         )}
 
-        <ReactQuill
-          value={desc}
-          onChange={setDesc}
+        <textarea
+          name="desc"
+          value={post.desc}
+          onChange={handleChange}
           className={styles.textArea}
           placeholder="Tell your story..."
-          theme="snow"
         />
       </div>
       <button onClick={handleSubmit} className={styles.publish}>
