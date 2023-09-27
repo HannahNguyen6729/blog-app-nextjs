@@ -12,6 +12,7 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import { firebaseApp } from '@/utils/firebase';
+import axios from 'axios';
 
 import styles from './writePage.module.css';
 
@@ -86,7 +87,7 @@ const WritePage = () => {
 
   const handleSubmit = async () => {
     //call api to create a new post
-    const response = await fetch(`/api/posts`, {
+    /* const response = await fetch(`/api/posts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -98,10 +99,24 @@ const WritePage = () => {
         catSlug: post.category,
         image: media,
       }),
+    }); */
+    const response = await axios({
+      url: `/api/posts`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        slug: slugify(post.title),
+        title: post.title,
+        desc: post.desc,
+        catSlug: post.category,
+        image: media,
+      },
     });
+    console.log({ response });
     if (response.status === 200) {
-      const result = await response.json();
-      router.push(`/posts/${result.slug}`);
+      router.push(`/posts/${response.data.slug}`);
     }
   };
 

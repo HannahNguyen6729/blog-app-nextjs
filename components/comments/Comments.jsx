@@ -5,10 +5,11 @@ import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 import { useState } from 'react';
+import axios from 'axios';
 
 import styles from './comments.module.css';
 
-const fetcher = async (queryParameters) => {
+/* const fetcher = async (queryParameters) => {
   const res = await fetch(queryParameters.url);
   const data = await res.json();
 
@@ -18,6 +19,13 @@ const fetcher = async (queryParameters) => {
   }
 
   return data;
+}; */
+const fetcher = async (queryParameters) => {
+  const { data } = await axios({
+    url: queryParameters.url,
+    method: 'GET',
+  });
+  return data;
 };
 
 const Comments = ({ postSlug }) => {
@@ -25,9 +33,12 @@ const Comments = ({ postSlug }) => {
 
   const { data, isLoading, error, mutate } = useSWR(
     { url: `http://127.0.0.1:3000/api/comments?postSlug=${postSlug}` },
+    /* {
+      url: `https://hanh-nguyen-blogr-nextjs-prisma.vercel.app/api/comments?postSlug=${postSlug}`,
+    }, */
     fetcher
   );
-
+  console.log({ data });
   const [description, setDescription] = useState('');
 
   if (error) return <div>failed to load</div>;
@@ -39,7 +50,7 @@ const Comments = ({ postSlug }) => {
 
   const handleSubmit = async () => {
     //call api to create a new comment
-    const response = await fetch(`/api/comments`, {
+    /*  const response = await fetch(`/api/comments`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +58,18 @@ const Comments = ({ postSlug }) => {
       body: JSON.stringify({ desc: description, postSlug }),
     });
     const result = await response.json();
-    console.log('Success:', result);
+    console.log('Success:', result); */
+
+    const response = await axios({
+      url: '/api/comments',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: { desc: description, postSlug },
+    });
+    //const result = await response.json();
+    console.log('Success:', response);
 
     //update comment list
     mutate();

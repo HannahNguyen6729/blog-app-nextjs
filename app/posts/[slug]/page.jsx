@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Comments from '@/components/comments/Comments';
 import Menu from '@/components/menu/Menu';
+import axios from 'axios';
 
 import styles from './singlePage.module.css';
 
@@ -17,7 +18,12 @@ const getData = async (slug) => {
 };
 
 const SinglePage = async ({ params }) => {
-  const data = await getData(params.slug);
+  // const data = await getData(params.slug);
+  const { data } = await axios({
+    url: `http://127.0.0.1:3000/api/posts/${params.slug}`,
+    //url: `https://hanh-nguyen-blogr-nextjs-prisma.vercel.app/api/posts/${params.slug}`,
+    method: 'GET',
+  });
 
   return (
     <div className={styles.container}>
@@ -53,10 +59,11 @@ const SinglePage = async ({ params }) => {
         <div className={styles.post}>
           <div className={styles.description} />
           <div className={styles.comment}>
-            <div
+            {/*  <div
               className={styles.desc}
               dangerouslySetInnerHTML={{ __html: data?.desc }}
-            />
+            /> */}
+            <div>{data?.desc}</div>
             <Comments postSlug={params.slug} />
           </div>
         </div>
