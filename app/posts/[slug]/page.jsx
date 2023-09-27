@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Comments from '@/components/comments/Comments';
 import Menu from '@/components/menu/Menu';
 import axios from 'axios';
+import { API_URL } from '@/utils/const';
 
 import styles from './singlePage.module.css';
 
@@ -20,7 +21,7 @@ const getData = async (slug) => {
 const SinglePage = async ({ params }) => {
   // const data = await getData(params.slug);
   const { data } = await axios({
-    url: `http://127.0.0.1:3000/api/posts/${params.slug}`,
+    url: `${API_URL}/api/posts/${params.slug}`,
     //url: `https://hanh-nguyen-blogr-nextjs-prisma.vercel.app/api/posts/${params.slug}`,
     method: 'GET',
   });

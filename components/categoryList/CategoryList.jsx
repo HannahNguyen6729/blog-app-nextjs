@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import axios from 'axios';
+import { API_URL } from '@/utils/const';
 
 import styles from './categoryList.module.css';
 
@@ -20,7 +21,7 @@ const getData = async () => {
 const CategoryList = async () => {
   // const data = await getData();
   const { data } = await axios({
-    url: 'http://127.0.0.1:3000/api/categories',
+    url: `${API_URL}/api/categories`,
     // url: 'https://hanh-nguyen-blogr-nextjs-prisma.vercel.app/api/categories',
     method: 'GET',
   });

@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import useSWR from 'swr';
 import { useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '@/utils/const';
 
 import styles from './comments.module.css';
 
@@ -32,7 +33,7 @@ const Comments = ({ postSlug }) => {
   const { status } = useSession();
 
   const { data, isLoading, error, mutate } = useSWR(
-    { url: `http://127.0.0.1:3000/api/comments?postSlug=${postSlug}` },
+    { url: `${API_URL}/api/comments?postSlug=${postSlug}` },
     /* {
       url: `https://hanh-nguyen-blogr-nextjs-prisma.vercel.app/api/comments?postSlug=${postSlug}`,
     }, */

@@ -3,6 +3,7 @@ import styles from './cardList.module.css';
 import Pagination from '../pagination/Pagination';
 import Card from '../card/Card';
 import axios from 'axios';
+import { API_URL } from '@/utils/const';
 
 const getData = async (pageNumber, category) => {
   const res = await fetch(
@@ -24,9 +25,7 @@ const getData = async (pageNumber, category) => {
 const CardList = async ({ pageNumber, category }) => {
   // const data = await getData(pageNumber, category);
   const { data } = await axios({
-    url: `http://127.0.0.1:3000/api/posts?page=${pageNumber}&category=${
-      category || ''
-    }`,
+    url: `${API_URL}/api/posts?page=${pageNumber}&category=${category || ''}`,
     /*  url: `https://hanh-nguyen-blogr-nextjs-prisma.vercel.app/api/posts?page=${pageNumber}&category=${
       category || ''
     }`, */
