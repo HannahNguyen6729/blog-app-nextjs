@@ -19,14 +19,9 @@ const Card = ({ post }) => {
           <span className={styles.category}> {catSlug} </span>
         </div>
         <Link href={`/posts/${slug}`}>
-          <h1> {title} </h1>
+          <h1> {title.substring(0, 60)} </h1>
         </Link>
-        {/* <div className={styles.desc}>{desc.substring(0, 60)}</div> */}
-        {/* <div
-          className={styles.desc}
-          dangerouslySetInnerHTML={{ __html: desc.substring(0, 60) }}
-        /> */}
-        <div>{desc}</div>
+        <div className={styles.desc}>{desc.substring(0, 200)}...</div>
         <Link href={`/posts/${slug}`} className={styles.link}>
           Read More
         </Link>
